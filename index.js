@@ -8,8 +8,6 @@ const Memcached = require('memcached');
 
 const redis = require('redis');
 
-const client = redis.createClient();
-
 const sqlite3 = require('sqlite3').verbose();
 
 const PORT = process.env.PORT || 3128;
@@ -47,11 +45,11 @@ let cacheMiddleware = duration => {
 // --------------------------------------------------------
 
 // load new cache
-// let cache = flatCache.load('productsCache');
+let cache = flatCache.load('productsCache');
 // optionally, you can go ahead and pass the directory you want your
 // cache to be loaded from by using this
 
-let cache = flatCache.load('productsCache', path.resolve('./cache/'));
+// let cache = flatCache.load('productsCache', path.resolve('./cache'));
 
 // create flat cache routes
 let flatCacheMiddleware = (req, res, next) => {
@@ -125,7 +123,7 @@ let redisMiddleware = (req, res, next) => {
 // create app routes
 // --------------------------------------------------------
 
-app.get('/products', redisMiddleware, function(req, res) {
+app.get('/products',redisMiddleware, function(req, res) {
   setTimeout(() => {
     let db = new sqlite3.Database('./NodeInventory.db');
     let sql = `SELECT * FROM products`;
